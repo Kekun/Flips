@@ -97,3 +97,19 @@ endif
 
 $(FNAME_$(TARGET)): $(SOURCES) $(XFILES)
 	$(CXX) $^ -std=c++98 $(CFLAGS_G) $(MOREFLAGS) $(OPTFLAGS) $(CPPFLAGS) $(CFLAGS) $(CXXFLAGS) $(LFLAGS) -o$@
+
+ifneq ($(findstring linux,$(targetmachine)),)
+  ifeq ($(TARGET),gtk)
+install:
+	mkdir -p $(DESTDIR)$(prefix)/bin
+	mkdir -p $(DESTDIR)$(prefix)/share/applications
+	mkdir -p $(DESTDIR)$(prefix)/share/icons/hicolor/scalable/apps
+	mkdir -p $(DESTDIR)$(prefix)/share/icons/hicolor/symbolic/apps
+	mkdir -p $(DESTDIR)$(prefix)/share/metainfo
+	install -p -m755 $(FNAME_$(TARGET)) $(DESTDIR)$(prefix)/bin
+	install -p -m755 data/com.github.Alcaro.Flips.desktop $(DESTDIR)$(prefix)/share/applications
+	install -p -m644 data/com.github.Alcaro.Flips.svg $(DESTDIR)$(prefix)/share/icons/hicolor/scalable/apps
+	install -p -m644 data/com.github.Alcaro.Flips-symbolic.svg $(DESTDIR)$(prefix)/share/icons/hicolor/symbolic/apps
+	install -p -m644 data/com.github.Alcaro.Flips.metainfo.xml $(DESTDIR)$(prefix)/share/metainfo
+  endif
+endif
